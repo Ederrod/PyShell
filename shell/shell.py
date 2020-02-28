@@ -114,13 +114,17 @@ def execute_cmd(query):
             
 
 def process_user_query(query): 
-    if query == '': 
+    if query == '':
+        if not os.isatty(sys.stdin.fileno()): 
+            sys.exit(0)
         return
     elif 'exit' in query: 
         sys.exit(0)
     elif 'cd' in query: 
         # Handle change directory
         change_dir(query)
+    elif '\x03' in query: 
+        sys.exit(0)
     elif '\x7C' in query: # |
         # Handle pipe command 
         pipe_cmds(query)
